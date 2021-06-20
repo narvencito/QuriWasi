@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace QuriWasi.Infrastructure
 {
@@ -22,9 +23,18 @@ namespace QuriWasi.Infrastructure
             }
             else
             {
+                //For ISS
+                //string url = configuration.GetConnectionString("DefaultConnection");
+                //services.AddDbContext<ApplicationDbContext>(options =>
+                //    options.UseNpgsql(
+                //        configuration.GetConnectionString("DefaultConnection"),
+                //        b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+                // For Docker
+                string databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
                 services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseNpgsql(
-                        configuration.GetConnectionString("DefaultConnection"),
+                        configuration.GetConnectionString(databaseUrl),
                         b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             }
 
